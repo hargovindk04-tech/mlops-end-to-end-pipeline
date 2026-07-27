@@ -1,0 +1,15 @@
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+imbalanced-learn
+pandera
+evidently
+mlflow
+optuna
+shap
+joblib
+jupyter
+notebook
+ipykernel
