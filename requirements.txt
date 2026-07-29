@@ -13,3 +13,4 @@ joblib
 jupyter
 notebook
 ipykernel
+pandera
