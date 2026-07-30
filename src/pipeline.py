@@ -4,6 +4,8 @@ from src.data_loader import (
     load_stress_data,
     load_raw_data,
 )
+from src.feature_engineering import engineer_features, print_feature_summary
+from src.preprocessing import encode_type, prepare_training_data
 from src.schema_validation import validate_dataframe, validate_stress
 
 
@@ -18,7 +20,27 @@ def main():
     if stress_df is not None:
         print(f"Mean Rotational speed (stress):  {stress_df['Rotational speed'].mean():.2f}")
 
-    print("\nDatasets loaded and validated successfully.\n")
+    train_df = engineer_features(train_df)
+    current_df = engineer_features(current_df)
+    if stress_df is not None:
+        stress_df = engineer_features(stress_df)
+
+    print("\nEngineered features 'Power_W' and 'Temp_diff' added to datasets.")
+    print_feature_summary(train_df, "Train Data")
+    print_feature_summary(current_df, "Current Data")
+    if stress_df is not None:
+        print_feature_summary(stress_df, "Stress Data")
+
+    training_data = prepare_training_data(train_df)
+
+    current_df, _ = encode_type(current_df, training_data["encoder"])
+    if stress_df is not None:
+        stress_df, _ = encode_type(stress_df, training_data["encoder"])
+
+    print("\nPreprocessing complete.")
+    print(f"Training features shape (after SMOTE): {training_data['X_train_sm'].shape}")
+    print(f"Validation features shape: {training_data['X_val'].shape}")
+    print("\nDatasets loaded, validated, and preprocessed successfully.\n")
 
 
 if __name__ == "__main__":

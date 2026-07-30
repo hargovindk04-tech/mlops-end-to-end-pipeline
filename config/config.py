@@ -1,7 +1,23 @@
 RANDOM_STATE = 42
 TEST_SIZE = 0.2
 TARGET_COLUMN = "Failure_Type"
+TYPE_COLUMN = "Type"
+TYPE_ENCODED_COLUMN = "Type_enc"
 MLFLOW_EXPERIMENT = "MLOps-End-to-End"
+SMOTE_K_NEIGHBORS = 3
+
+FEATURES = [
+    TYPE_ENCODED_COLUMN,
+    "Air temperature",
+    "Process temperature",
+    "Rotational speed",
+    "Torque",
+    "Tool wear",
+    "Power_W",
+    "Temp_diff",
+]
+
+ENGINEERED_FEATURES = ["Power_W", "Temp_diff"]
 
 CLASS_NAMES = {
     0: "No Failure",

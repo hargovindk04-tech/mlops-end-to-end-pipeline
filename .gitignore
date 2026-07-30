@@ -17,3 +17,4 @@ mlruns/
 models/*.pkl
 
 reports/*.html
+*.egg-info/
