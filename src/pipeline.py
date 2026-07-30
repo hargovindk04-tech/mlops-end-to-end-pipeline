@@ -7,6 +7,7 @@ from src.data_loader import (
 from src.feature_engineering import engineer_features, print_feature_summary
 from src.preprocessing import encode_type, prepare_training_data
 from src.schema_validation import validate_dataframe, validate_stress
+from src.train import save_model, train_and_evaluate_models
 
 
 def main():
@@ -40,7 +41,16 @@ def main():
     print("\nPreprocessing complete.")
     print(f"Training features shape (after SMOTE): {training_data['X_train_sm'].shape}")
     print(f"Validation features shape: {training_data['X_val'].shape}")
-    print("\nDatasets loaded, validated, and preprocessed successfully.\n")
+
+    _, best_model_name, fitted_models = train_and_evaluate_models(
+        training_data["X_train_sm"],
+        training_data["y_train_sm"],
+        training_data["X_val"],
+        training_data["y_val"],
+    )
+    save_model(fitted_models[best_model_name])
+
+    print("\nDatasets loaded, validated, preprocessed, and models trained successfully.\n")
 
 
 if __name__ == "__main__":

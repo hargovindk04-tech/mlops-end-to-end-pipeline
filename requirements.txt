@@ -4,6 +4,8 @@ matplotlib
 seaborn
 scikit-learn
 imbalanced-learn
+xgboost
+lightgbm
 pandera
 evidently
 mlflow

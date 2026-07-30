@@ -4,7 +4,9 @@ TARGET_COLUMN = "Failure_Type"
 TYPE_COLUMN = "Type"
 TYPE_ENCODED_COLUMN = "Type_enc"
 MLFLOW_EXPERIMENT = "MLOps-End-to-End"
+MODEL_SELECTION_EXPERIMENT = "PredMaint_ModelSelection"
 SMOTE_K_NEIGHBORS = 3
+N_ESTIMATORS = 100
 
 FEATURES = [
     TYPE_ENCODED_COLUMN,
@@ -26,3 +28,5 @@ CLASS_NAMES = {
     3: "PWF",
     4: "OSF",
 }
+
+CLASS_LIST = list(CLASS_NAMES.keys())
