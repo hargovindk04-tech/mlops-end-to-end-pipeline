@@ -7,6 +7,7 @@ Train and compare baseline classifiers for failure-type prediction.
 from __future__ import annotations
 
 import joblib
+import mlflow
 import pandas as pd
 from lightgbm import LGBMClassifier
 from sklearn.base import ClassifierMixin
@@ -23,6 +24,11 @@ from src.evaluation import (
     evaluate_classifier,
     get_best_model_name,
     print_comparison_table,
+)
+from src.mlflow_tracking import (
+    log_evaluation_metrics,
+    log_sklearn_model,
+    setup_model_selection_experiment,
 )
 
 
@@ -67,19 +73,35 @@ def train_and_evaluate_models(
     y_train: pd.Series,
     X_val: pd.DataFrame,
     y_val: pd.Series,
+    *,
+    use_mlflow: bool = False,
 ) -> tuple[pd.DataFrame, str, dict[str, ClassifierMixin | Pipeline]]:
     """
     Train each candidate model on SMOTE-balanced training data and evaluate on validation.
     """
+    if use_mlflow:
+        setup_model_selection_experiment()
+
     results: dict[str, dict[str, float]] = {}
     fitted_models: dict[str, ClassifierMixin | Pipeline] = {}
 
     for model_name, model in get_candidate_models().items():
         print(f"Training {model_name}...")
-        model.fit(X_train, y_train)
-        y_pred = model.predict(X_val)
-        results[model_name] = evaluate_classifier(y_val, y_pred)
-        fitted_models[model_name] = model
+        if use_mlflow:
+            with mlflow.start_run(run_name=model_name):
+                mlflow.log_param("model", model_name)
+                model.fit(X_train, y_train)
+                y_pred = model.predict(X_val)
+                metrics = evaluate_classifier(y_val, y_pred)
+                log_evaluation_metrics(metrics)
+                log_sklearn_model(model, X_val)
+                results[model_name] = metrics
+                fitted_models[model_name] = model
+        else:
+            model.fit(X_train, y_train)
+            y_pred = model.predict(X_val)
+            results[model_name] = evaluate_classifier(y_val, y_pred)
+            fitted_models[model_name] = model
 
     results_df = build_comparison_table(results)
     print_comparison_table(results_df)

@@ -7,6 +7,7 @@ from src.data_loader import (
 from src.feature_engineering import engineer_features, print_feature_summary
 from src.preprocessing import encode_type, prepare_training_data
 from src.schema_validation import validate_dataframe, validate_stress
+from src.optuna_tuning import tune_register_and_save
 from src.train import save_model, train_and_evaluate_models
 
 
@@ -42,15 +43,28 @@ def main():
     print(f"Training features shape (after SMOTE): {training_data['X_train_sm'].shape}")
     print(f"Validation features shape: {training_data['X_val'].shape}")
 
-    _, best_model_name, fitted_models = train_and_evaluate_models(
+    results_df, best_model_name, fitted_models = train_and_evaluate_models(
         training_data["X_train_sm"],
         training_data["y_train_sm"],
         training_data["X_val"],
         training_data["y_val"],
+        use_mlflow=True,
     )
-    save_model(fitted_models[best_model_name])
+    baseline_xgb_macro_f1 = results_df.loc["XGBoost", "Macro F1"]
 
-    print("\nDatasets loaded, validated, preprocessed, and models trained successfully.\n")
+    final_model = tune_register_and_save(
+        training_data["X_train_sm"],
+        training_data["y_train_sm"],
+        training_data["X_val"],
+        training_data["y_val"],
+        baseline_xgb_macro_f1,
+    )
+    save_model(final_model)
+
+    print(
+        f"\nModel selection winner: {best_model_name}. "
+        "Production artifact: Optuna-tuned XGBoost saved to models/best_model.pkl.\n"
+    )
 
 
 if __name__ == "__main__":

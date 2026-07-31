@@ -8,3 +8,9 @@ RAW_DATA = DATA_DIR/"raw.csv"
 MODEL_DIR = PROJECT_ROOT/"models"
 REPORT_DIR = PROJECT_ROOT/"reports"
 BEST_MODEL_PATH = MODEL_DIR/"best_model.pkl"
+MLFLOW_DB = PROJECT_ROOT/"mlflow.db"
+
+
+def get_mlflow_tracking_uri() -> str:
+    """Absolute SQLite tracking URI for MLflow."""
+    return "sqlite:///" + str(MLFLOW_DB.resolve()).replace("\\", "/")
