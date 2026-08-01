@@ -7,7 +7,9 @@ from src.data_loader import (
 from src.feature_engineering import engineer_features, print_feature_summary
 from src.preprocessing import encode_type, prepare_training_data
 from src.schema_validation import validate_dataframe, validate_stress
+from src.drift_detection import run_current_drift_report, run_stress_drift_report
 from src.optuna_tuning import tune_register_and_save
+from src.shap_analysis import run_shap_analysis
 from src.train import save_model, train_and_evaluate_models
 
 
@@ -35,6 +37,7 @@ def main():
 
     training_data = prepare_training_data(train_df)
 
+    train_df, _ = encode_type(train_df, training_data["encoder"])
     current_df, _ = encode_type(current_df, training_data["encoder"])
     if stress_df is not None:
         stress_df, _ = encode_type(stress_df, training_data["encoder"])
@@ -60,6 +63,11 @@ def main():
         baseline_xgb_macro_f1,
     )
     save_model(final_model)
+
+    run_current_drift_report(train_df, current_df)
+    if stress_df is not None:
+        run_stress_drift_report(train_df, stress_df)
+    run_shap_analysis(train_df)
 
     print(
         f"\nModel selection winner: {best_model_name}. "

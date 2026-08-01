@@ -19,4 +19,5 @@ mlflow.db
 models/*.pkl
 
 reports/*.html
+reports/*.png
 *.egg-info/

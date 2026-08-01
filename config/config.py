@@ -25,12 +25,27 @@ FEATURES = [
 
 ENGINEERED_FEATURES = ["Power_W", "Temp_diff"]
 
+DRIFT_FEATURES = [
+    "Air temperature",
+    "Process temperature",
+    "Rotational speed",
+    "Torque",
+    "Tool wear",
+]
+
 CLASS_NAMES = {
     0: "No Failure",
     1: "TWF",
     2: "HDF",
     3: "PWF",
     4: "OSF",
+}
+
+SHAP_FAILURE_CLASSES = {
+    1: "TWF (Tool Wear Failure)",
+    2: "HDF (Heat Dissipation Failure)",
+    3: "PWF (Power Failure)",
+    4: "OSF (Overstrain Failure)",
 }
 
 CLASS_LIST = list(CLASS_NAMES.keys())
