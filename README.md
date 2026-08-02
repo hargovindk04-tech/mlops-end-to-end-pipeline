@@ -1,7 +1,6 @@
 # End-to-End MLOps Pipeline
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
-[![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-orange)](https://scikit-learn.org/)
 [![MLflow](https://img.shields.io/badge/MLflow-Tracking%20%26%20Registry-0194E2?logo=mlflow&logoColor=white)](https://mlflow.org/)
 [![Optuna](https://img.shields.io/badge/Optuna-HPO-023047)](https://optuna.org/)
 [![Evidently](https://img.shields.io/badge/Evidently-Drift-6C5CE7)](https://www.evidentlyai.com/)
@@ -49,7 +48,7 @@ Detailed design: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 | Area | Tools |
 |------|--------|
 | Data quality | Pandera |
-| ML | scikit-learn, XGBoost, LightGBM |
+| ML | XGBoost, LightGBM |
 | Imbalance | imbalanced-learn (SMOTE) |
 | Experiments | MLflow (SQLite backend, Model Registry) |
 | HPO | Optuna (TPE, 30 trials) |
@@ -189,9 +188,6 @@ Experiments: **`PredMaint_ModelSelection`**, **`PredMaint_Optuna`**.
 
 ---
 
-## For recruiters / interviewers
-
-**Elevator pitch:** *I converted an end-to-end MLOps assignment into a modular Python project with a CLI. Data is gated by Pandera; training is logged in MLflow; XGBoost is tuned with Optuna and registered with a production alias; Evidently flags batch drift; SHAP explains drivers per failure class.*
 
 **Suggested demo order (5 min):**
 
@@ -203,9 +199,6 @@ Experiments: **`PredMaint_ModelSelection`**, **`PredMaint_Optuna`**.
 
 ---
 
-## Origin
-
-Built from the **Predictive Maintenance** MLOps notebook (`notebooks/MLOps.ipynb`), split into sessions: repo setup → validation → features → training → MLflow/Optuna → monitoring/SHAP → CLI polish.
 
 ---
 
